@@ -1,0 +1,180 @@
+.cart-container {
+    padding: 20px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.cart-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.cart-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.cart-items {
+    width: 65%;
+}
+
+.cart-item {
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.cart-item input[type="checkbox"] {
+    margin-right: 15px;
+    margin-top: 10px;
+    width: 18px;
+    height: 18px;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.product-info img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.product-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.product-id {
+    color: #888;
+    font-size: 13px;
+    margin: 0;
+}
+
+.product-name {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.product-category {
+    color: #888;
+    font-size: 14px;
+}
+
+.product-price {
+    margin-top: 8px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.cart-item-right {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.delete-button {
+    border: none;
+    background: none;
+    color: #ff5a5a;
+    cursor: pointer;
+    font-size: 22px;
+    align-self: flex-end;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.quantity-control button {
+    border: none;
+    background: #eee;
+    padding: 5px 12px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.product-subinfo {
+    margin-top: 10px;
+    font-size: 15px;
+    color: #888;
+}
+
+.total-price {
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.order-summary {
+    width: 32%;
+    border: 1px solid #ddd;
+    padding: 25px 20px;
+    border-radius: 10px;
+    background: #fff;
+    min-width: 270px;
+    max-width: 350px;
+    height: fit-content;
+}
+
+.order-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.order-detail.total {
+    font-weight: bold;
+    font-size: 18px;
+    color: #222;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.order-button {
+    flex: 1;
+    background: #222 !important;
+    color: #fff;
+    padding: 12px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.order-button:hover {
+    background: #444;   /* 더 밝은 회색으로 hover 효과 */
+}
+
+.delete-all-button {
+    flex: 1;
+    background: #ff5a5a;
+    color: white;
+    padding: 12px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}

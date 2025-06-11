@@ -1,0 +1,94 @@
+/* 로그인 페이지 전체 컨테이너 */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+/* 로그인 박스 */
+.login-box {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px; /* 입력 필드와 버튼 길이를 동일하게 설정 */
+}
+
+/* 로그인 제목 */
+.login-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 입력 필드 스타일 */
+.login-input {
+    width: 93%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+/* 입력 필드 포커스 스타일 */
+.login-input:focus {
+    outline: none;
+    border-color: #007bff; /* 파란색 포커스 */
+}
+
+/* 에러 메시지 스타일 */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-top: -5px;
+    text-align: center;
+}
+
+/* 로그인 버튼 스타일 */
+.login-button {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: #007bff; /* 파란색 버튼 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: #0056b3; /* 더 진한 파란색 */
+}
+
+.login-button[disabled] {
+    background-color: #cccccc; /* 로딩 중일 때 버튼 비활성화 색상 */
+}
+
+/* 회원가입 링크 섹션 */
+.signup-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.signup-link p {
+    margin-bottom: 10px;
+}
+
+.signup-button {
+    background-color: transparent;
+    color: #007bff; /* 파란색 텍스트 */
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.signup-button:hover {
+    text-decoration: underline; /* 호버 시 밑줄 추가 */
+}

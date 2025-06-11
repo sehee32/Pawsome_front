@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  /* 필요에 따라 padding 등 추가 */
+}
+
+/* Navbar, Footer 컴포넌트에 고정 높이 적용 권장 */
+.navbar {
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.footer {
+  height: 50px;
+  flex-shrink: 0;
+}
+
+
+
