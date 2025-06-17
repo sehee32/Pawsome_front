@@ -9,21 +9,6 @@
 - Frontend : React, Axios
 - Backend : Spring Boot, MySQL, JPA, JWT
 
-
-
-## 🌟 주요 기능
-
-- 회원가입
-- 로그인
-- 마이페이지 (주문 내역 확인, 회원 정보 수정)
-- 상품 목록 및 상세 조회
-- 장바구니 담기, 수량 조절, 삭제
-- 주문 시 상품 정보 스냅샷 저장 (상품 삭제 후에도 주문내역 유지)
-- 주문 및 결제 페이지
-- 관리자 전용 상품 관리 페이지
-
-
-
 ## 🚀 프로젝트 설정 및 실행
 
 ### 설치
@@ -36,3 +21,88 @@ npm install
 
 ```bash
 npm start
+```
+
+## 🌟 주요 기능
+
+### 회원가입
+
+<details><summary>주요 코드
+</summary>
+
+```
+코드입력하기
+```
+</details>
+
+
+### 로그인 (LoginPage.vue)
+
+<details><summary>주요 코드
+</summary>
+
+```
+코드입력하기
+```
+</details>
+
+### 마이페이지
+
+<details><summary>주요 코드
+</summary>
+
+```
+코드입력하기
+```
+</details>
+
+
+### 상품 목록 및 상세 조회
+
+<details><summary>주요 코드
+</summary>
+
+```
+코드입력하기
+```
+</details>
+
+
+### 장바구니
+
+<details><summary>주요 코드
+</summary>
+
+```
+코드입력하기
+```
+</details>
+
+
+### 주문 및 결제 페이지
+
+<details><summary>주요 코드
+</summary>
+
+```
+코드입력하기
+```
+</details>
+
+
+### 관리자 전용 상품 관리 페이지
+
+<details><summary>주요 코드
+</summary>
+
+```
+코드입력하기
+```
+</details>
+
+
+
+
+
+
+
