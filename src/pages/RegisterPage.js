@@ -10,26 +10,56 @@ function RegisterPage() {
     });
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isEmailAvailable, setIsEmailAvailable] = useState(false);
+    const [emailCheckMessage, setEmailCheckMessage] = useState('');
+
+    // 이메일 중복 확인
+    const handleEmailCheck = async () => {
+        if (!formData.email) {
+            setEmailCheckMessage('이메일을 입력하세요.');
+            return;
+        }
+        try {
+            const res = await axios.get(`http://localhost:8080/api/auth/check-email/${formData.email}`);
+            if (res.data) {
+                setIsEmailAvailable(false);
+                setEmailCheckMessage('이미 사용 중인 이메일입니다.');
+            } else {
+                setIsEmailAvailable(true);
+                setEmailCheckMessage('사용 가능한 이메일입니다.');
+            }
+        } catch (e) {
+            setEmailCheckMessage('이메일 확인 중 오류가 발생했습니다.');
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+        if (name === 'email') {
+            setIsEmailAvailable(false);
+            setEmailCheckMessage('');
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage('');
+        if (!isEmailAvailable) {
+            setErrorMessage('이메일 중복 확인을 해주세요.');
+            return;
+        }
         setIsLoading(true);
         try {
-            await axios.post('http://localhost:8080/api/auth/register', formData, {
-                headers: { 'Content-Type': 'application/json' }
-            });
+            await axios.post('http://localhost:8080/api/auth/register', formData);
             alert('회원가입 성공!');
-            setFormData({ username: '', email: '', password: '' });
             window.location.href = '/login';
         } catch (error) {
-            console.error('회원가입 오류:', error);
-            setErrorMessage('회원가입에 실패했습니다. 다시 시도해주세요.');
+            setErrorMessage(
+                error.response?.data?.includes("이미 사용 중")
+                    ? '이미 가입된 이메일입니다.'
+                    : '회원가입에 실패했습니다.'
+            );
         } finally {
             setIsLoading(false);
         }
@@ -49,15 +79,32 @@ function RegisterPage() {
                         required
                         className="register-input"
                     />
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="이메일"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="register-input"
-                    />
+
+                    <div className="email-check-wrapper">
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="이메일"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            className="register-input"
+                            style={{ marginBottom: 0 }}
+                        />
+                        <button
+                            type="button"
+                            className="email-check-button"
+                            onClick={handleEmailCheck}
+                        >
+                            중복확인
+                        </button>
+                    </div>
+                    {/* 이메일 중복확인 메시지 */}
+                    {emailCheckMessage && (
+                        <div className={`email-check-message ${isEmailAvailable ? 'success' : 'error'}`}>
+                            {emailCheckMessage}
+                        </div>
+                    )}
                     <input
                         type="password"
                         name="password"
