@@ -27,6 +27,8 @@ npm start
 
 ### 회원가입
 
+![회원가입](https://github.com/user-attachments/assets/642cafb5-36de-4c9b-a8b3-2149905386c6)
+
 <details><summary>주요 코드
 </summary>
 
