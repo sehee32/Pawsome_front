@@ -193,7 +193,58 @@ const handleDelete = async () => {
 </summary>
 
 ```
-코드입력하기
+// 상품 카드 컴포넌트 (ProductCard.js)
+function ProductCard({ product }) {
+    return (
+        <div className="product-card">
+            {/* 상품 이미지 클릭 시 상세페이지 이동 */}
+            <Link to={`/products/${product.id}`}>
+                <img src={`http://localhost:8080${product.imageUrl}`} alt={product.name} />
+            </Link>
+            <h3>{product.name}</h3>
+            <p>{product.description}</p>
+            <p className="price">{product.price.toLocaleString()}원</p>
+        </div>
+    );
+}
+
+
+// 상품 목록 불러오기 (HomePage.js)
+function HomePage() {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/products')
+            .then(response => setProducts(response.data))
+            .catch(error => console.error('Error fetching products:', error));
+    }, []);
+
+    return (
+        <div className="homepage">
+            <div className="product-list">
+                {products.map(product => (
+                    <ProductCard key={product.id} product={product} />
+                ))}
+            </div>
+        </div>
+    );
+}
+
+
+// 상품 상세 정보 호출 (ProductDetailPage.js)
+function ProductDetailPage() {
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
+
+    useEffect(() => {
+        axios.get(`http://localhost:8080/api/products/${id}`)
+            .then(response => setProduct(response.data))
+            .catch(error => console.error('Error fetching product:', error));
+    }, [id]);
+
+    if (!product) return <div className="loading">Loading...</div>;
+}
+
 ```
 </details>
 
@@ -210,7 +261,119 @@ const handleDelete = async () => {
 </summary>
 
 ```
-코드입력하기
+// 장바구니 담기 (ProductDetailPage.js)
+const addToCart = async () => {
+  const token = localStorage.getItem("token"); // JWT 인증 토큰
+  if (!token) {
+    alert("로그인이 필요합니다.");
+    window.location.href = "/login";
+    return;
+  }
+
+  try {
+    await axios.post(
+      `http://localhost:8080/api/cart/${product.id}`,
+      { quantity: 1 },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    alert("장바구니에 담았습니다!");
+  } catch (error) {
+    alert("오류 발생: " + (error.response?.data || error.message));
+  }
+};
+
+
+// 수량 변경 및 삭제 (Cart.js)
+// 수량 증가
+const increaseQuantity = async (productId) => {
+  const token = localStorage.getItem("token");
+  try {
+    await axios.put(
+      `http://localhost:8080/api/cart/${productId}`,
+      { quantity: 1 },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    setCartItems(prev =>
+      prev.map(item =>
+        item.product.id === productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      )
+    );
+  } catch {
+    alert("수량 변경에 실패했습니다.");
+  }
+};
+
+// 수량 감소
+const decreaseQuantity = async (productId) => {
+  const token = localStorage.getItem("token");
+  try {
+    await axios.put(
+      `http://localhost:8080/api/cart/${productId}`,
+      { quantity: -1 },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    setCartItems(prev =>
+      prev
+        .map(item =>
+          item.product.id === productId
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+        .filter(item => item.quantity > 0)
+    );
+  } catch {
+    alert("수량 변경에 실패했습니다.");
+  }
+};
+
+// 단일 상품 삭제
+const removeFromCart = async (productId) => {
+  const token = localStorage.getItem("token");
+  try {
+    await axios.delete(`http://localhost:8080/api/cart/${productId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setCartItems(prev => prev.filter(item => item.product.id !== productId));
+    setSelectedItems(prev => prev.filter(id => id !== productId));
+  } catch {
+    alert("삭제에 실패했습니다.");
+  }
+};
+
+// 선택된 상품 삭제
+const removeSelectedItems = async () => {
+  const token = localStorage.getItem("token");
+  try {
+    await Promise.all(
+      selectedItems.map(productId =>
+        axios.delete(`http://localhost:8080/api/cart/${productId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+      )
+    );
+    setCartItems(prev => prev.filter(item => !selectedItems.includes(item.product.id)));
+    setSelectedItems([]);
+  } catch {
+    alert("선택 항목 삭제에 실패했습니다.");
+  }
+};
+
+// 전체 삭제
+const clearCart = async () => {
+  const token = localStorage.getItem("token");
+  try {
+    await axios.delete("http://localhost:8080/api/cart", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setCartItems([]);
+    setSelectedItems([]);
+  } catch {
+    alert("전체 삭제에 실패했습니다.");
+  }
+};
+
 ```
 </details>
 
@@ -225,7 +388,47 @@ const handleDelete = async () => {
 </summary>
 
 ```
-코드입력하기
+//주문페이지 이동 (Cart.js)
+const handleOrder = () => {
+  if (selectedItems.length === 0) {
+    alert("주문할 상품을 선택해주세요.");
+    return;
+  }
+  const selectedCartItems = cartItems.filter(item =>
+    selectedItems.includes(item.product.id)
+  );
+  navigate("/order", { state: { cartItems: selectedCartItems } });
+};
+
+// 주문데이터 제출 (OrderPage.js)
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const token = localStorage.getItem("token");
+
+  try {
+    const orderData = {
+      items: cartItems.map(item => ({
+        productId: item.product.id,
+        quantity: item.quantity
+      })),
+      recipient: orderInfo.recipient,
+      address: `${orderInfo.address} ${orderInfo.detailAddress}`,
+      postcode: orderInfo.postcode,
+      phone: orderInfo.phone
+    };
+
+    await axios.post(
+      "http://localhost:8080/api/orders",
+      orderData,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    alert("주문이 완료되었습니다!");
+    navigate("/mypage");
+  } catch {
+    alert("주문 처리 중 오류가 발생했습니다.");
+  }
+};
 ```
 </details>
 
@@ -239,10 +442,6 @@ const handleDelete = async () => {
 코드입력하기
 ```
 </details>
-
-
-
-
 
 
 
