@@ -36,7 +36,52 @@ npm start
 </summary>
 
 ```
-코드입력하기
+// 이메일 중복 확인
+const handleEmailCheck = async () => {
+  if (!formData.email) {
+    setEmailCheckMessage('이메일을 입력하세요.');
+    return;
+  }
+  try {
+    const res = await axios.get(`http://localhost:8080/api/auth/check-email/${formData.email}`);
+    if (res.data) {
+      setIsEmailAvailable(false);
+      setEmailCheckMessage('이미 사용 중인 이메일입니다.');
+    } else {
+      setIsEmailAvailable(true);
+      setEmailCheckMessage('사용 가능한 이메일입니다.');
+    }
+  } catch (e) {
+    setEmailCheckMessage('이메일 확인 중 오류가 발생했습니다.');
+  }
+};
+
+
+// 회원가입 요청
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setErrorMessage('');
+
+  if (!isEmailAvailable) {
+    setErrorMessage('이메일 중복 확인을 해주세요.');
+    return;
+  }
+
+  setIsLoading(true);
+  try {
+    await axios.post('http://localhost:8080/api/auth/register', formData);
+    alert('회원가입 성공!');
+    window.location.href = '/login';
+  } catch (error) {
+    setErrorMessage(
+      error.response?.data?.includes("이미 사용 중")
+        ? '이미 가입된 이메일입니다.'
+        : '회원가입에 실패했습니다.'
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
 ```
 </details>
 
@@ -49,7 +94,27 @@ npm start
 </summary>
 
 ```
-코드입력하기
+// 로그인 요청
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setErrorMessage('');
+  setIsLoading(true);
+  try {
+    const response = await axios.post('http://localhost:8080/api/auth/login', formData);
+
+    // 로그인 성공 처리
+    alert(`환영합니다, ${response.data.username}!`);
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('userEmail', response.data.email);
+
+    window.location.href = '/';
+  } catch (error) {
+    console.error('로그인 오류:', error);
+    setErrorMessage('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
+  } finally {
+    setIsLoading(false);
+  }
+};
 ```
 </details>
 
@@ -64,7 +129,59 @@ npm start
 </summary>
 
 ```
-코드입력하기
+// 사용자 정보 / 주문 내역 조회
+useEffect(() => {
+  const token = localStorage.getItem("token");
+
+  axios.get("http://localhost:8080/api/user/me", {
+    headers: { Authorization: `Bearer ${token}` }
+  }).then(res => setUserInfo(res.data));
+
+  axios.get("http://localhost:8080/api/user/orders", {
+    headers: { Authorization: `Bearer ${token}` }
+  }).then(res => setOrders(res.data));
+}, []);
+
+
+// 비밀번호 변경
+const handleChangePassword = async (e) => {
+  e.preventDefault();
+  const token = localStorage.getItem("token");
+
+  try {
+    await axios.put("http://localhost:8080/api/user/password", {
+      currentPassword: currentPw,
+      newPassword: newPw
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    setPwMsg("비밀번호가 변경되었습니다.");
+    setCurrentPw(""); 
+    setNewPw("");
+  } catch (err) {
+    setPwMsg("비밀번호 변경 실패: " + (err.response?.data || "오류"));
+  }
+};
+
+
+// 회원 탈퇴
+const handleDelete = async () => {
+  if (!window.confirm("정말 회원탈퇴 하시겠습니까?")) return;
+  const token = localStorage.getItem("token");
+
+  try {
+    await axios.delete("http://localhost:8080/api/user/me", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    alert("회원탈퇴가 완료되었습니다.");
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  } catch (err) {
+    alert("회원탈퇴 실패: " + (err.response?.data || "오류"));
+  }
+};
+
 ```
 </details>
 
