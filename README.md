@@ -1,4 +1,4 @@
-![장바구니선택삭제](https://github.com/user-attachments/assets/f890d8de-74c9-41c3-a335-fd78acbdd070)#  Pawsome Front
+#  Pawsome Front
 
 이 프로젝트는 React를 사용하여 반려동물 용품 쇼핑몰 웹페이지를 구현했습니다.
 
