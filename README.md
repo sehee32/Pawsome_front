@@ -434,6 +434,8 @@ const handleSubmit = async (e) => {
 
 
 ### 관리자 전용 상품 관리 페이지
+![관리자페이지진입과상품삭제](https://github.com/user-attachments/assets/b2b93aae-6276-48e6-9a9c-fe410f94cdc2)
+![관리자상품추가](https://github.com/user-attachments/assets/6dea2ca1-9de6-4a2b-a2b1-706a9fec564e)
 
 <details><summary>주요 코드
 </summary>
