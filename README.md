@@ -441,7 +441,79 @@ const handleSubmit = async (e) => {
 </summary>
 
 ```
-코드입력하기
+// 관리자 페이지 진입 (Navbar.js)
+function Navbar() {
+    const [isAdmin, setIsAdmin] = useState(false); // 관리자 여부
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 여부
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsLoggedIn(true); // 토큰이 있으면 로그인 상태로 설정
+            axios.get('http://localhost:8080/api/auth/is-admin', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(response => setIsAdmin(response.data)) // 관리자 여부 확인
+                .catch(error => {
+                    console.error('관리자 여부 확인 오류:', error);
+                    setIsAdmin(false);
+                });
+        } else {
+            setIsLoggedIn(false); // 토큰이 없으면 로그아웃 상태로 설정
+        }
+    }, []);
+
+
+{isAdmin && <Link to="/admin">ADMIN</Link>} {/* 관리자 전용 */}
+
+
+// 관리자 페이지 상품 가져오기 (AdminDashboard.js)
+const fetchProducts = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/products');
+            console.log(response.data); // 응답 데이터 구조 확인
+            setProducts(response.data);
+        } catch (error) {
+            console.error('상품 목록 가져오기 오류:', error);
+        }
+    };
+
+// 상품 추가 & 삭제
+const handleAddProduct = async (e) => {
+        e.preventDefault();
+        try {
+            const formData = new FormData();
+            formData.append('name', newProduct.name);
+            formData.append('description', newProduct.description);
+            formData.append('price', newProduct.price);
+            formData.append('file', file); // 파일 추가
+
+            await axios.post('http://localhost:8080/api/products/add', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+
+            alert('상품 추가 성공!');
+            setNewProduct({ name: '', description: '', price: '' });
+            setFile(null); // 파일 초기화
+            fetchProducts();
+        } catch (error) {
+            console.error('상품 추가 오류:', error);
+            alert('상품 추가 실패!');
+        }
+    };
+
+    const handleDeleteProduct = async (id) => {
+        try {
+            await axios.delete(`http://localhost:8080/api/products/${id}`);
+            alert('상품 삭제 성공!');
+            fetchProducts();
+        } catch (error) {
+            console.error('상품 삭제 오류:', error);
+            alert('상품 삭제 실패!');
+        }
+    };
+
 ```
 </details>
 
