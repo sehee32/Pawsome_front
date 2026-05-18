@@ -26,6 +26,22 @@ npm install
 npm start
 ```
 
+
+## QA Testing
+
+- 회원가입 / 로그인 기능 테스트
+- JWT 인증 및 사용자 권한 테스트
+- 상품 목록 및 상세 조회 테스트
+- 장바구니 추가 / 수정 / 삭제 테스트
+- 주문 및 결제 프로세스 테스트
+- 마이페이지 주문 내역 및 회원정보 테스트
+- 관리자 상품 등록 / 삭제 기능 테스트
+
+📄 테스트케이스 문서:
+- Pawsome_TC.xlsx
+
+
+
 ## 🌟 주요 기능
 
 ### 회원가입
@@ -89,7 +105,7 @@ const handleSubmit = async (e) => {
 </details>
 
 
-### 로그인 (LoginPage.vue)
+### 로그인
 ![로그인성공](https://github.com/user-attachments/assets/0bf34ce5-461b-4303-b5b6-4c2fcf249e74)
 ![로그인실패](https://github.com/user-attachments/assets/aa5425e0-b25d-4db6-abfd-a5b88a9b9b93)
 
