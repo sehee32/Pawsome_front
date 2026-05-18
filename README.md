@@ -27,7 +27,7 @@ npm start
 ```
 
 
-## QA Testing
+## ✍️QA Testing
 
 - 회원가입 / 로그인 기능 테스트
 - JWT 인증 및 사용자 권한 테스트
